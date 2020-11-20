@@ -13,7 +13,7 @@ import xlsxwriter    ##  TLIU
 
 if __name__ == '__main__':
     OUTPUT = []  #
-    nb_episode = 1000
+    nb_episode = 2000
     actions_set = [
                    [1, 0, 0.1],
                    [1, 0, 0.2],
@@ -65,7 +65,7 @@ if __name__ == '__main__':
     Q_array_histroy = [  [10] for i in range(user_num)  ]     ##  TLIU
 
     for episode in range(nb_episode):
-
+        print("episode", episode)
         Q_array = []
         Qx_array = []
         Qy_array = []

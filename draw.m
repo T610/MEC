@@ -12,7 +12,7 @@ opts.VariableNames = "UE";
 opts.VariableTypes = "double";
 
 % 导入数据
-tbl = readtable("C:\Users\15212\Desktop\MEC1118\MEC1118\wolf.xlsx", opts, "UseExcel", false);
+tbl = readtable(".\wolf.xlsx", opts, "UseExcel", false);
 
 %% 转换为输出类型
 wolf = tbl.UE;
@@ -29,7 +29,7 @@ opts.VariableNames = "UE";
 opts.VariableTypes = "double";
 
 % 导入数据
-tbl = readtable("C:\Users\15212\Desktop\MEC1118\MEC1118\local.xlsx", opts, "UseExcel", false);
+tbl = readtable(".\local.xlsx", opts, "UseExcel", false);
 
 %% 转换为输出类型
 local = tbl.UE;
@@ -47,7 +47,7 @@ opts.VariableNames = "UE";
 opts.VariableTypes = "double";
 
 % 导入数据
-tbl = readtable("C:\Users\15212\Desktop\MEC1118\MEC1118\mec.xlsx", opts, "UseExcel", false);
+tbl = readtable(".\mec.xlsx", opts, "UseExcel", false);
 
 %% 转换为输出类型
 mec = tbl.UE;

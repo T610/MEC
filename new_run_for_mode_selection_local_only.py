@@ -67,7 +67,7 @@ if __name__ == '__main__':
     Q_array_histroy = [  [10] for i in range(user_num)  ]     ##  TLIU
 
     for episode in range(nb_episode):
-
+        print("episode", episode)
         Q_array = []
         Qx_array = []
         Qy_array = []
