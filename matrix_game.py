@@ -23,7 +23,7 @@ class MatrixGame():
         self.delta_t = [[] for _ in  range(self.num_ue)]                            #记录时延和时延门限值的差值t_max-t
         self.g0 = pow(10, 4)                        # 信道增益 g0= -40dB
         self.N0 = pow(10, -204 / 10)                # 噪声方差 N0= -174 dBm/Hz
-        self.q0 = 1.96 * pow(10, 5)                 # 队列阈值设定,单位 bits ,参考dymatic文章
+        self.q0 = 3.96 * pow(10, 6)                   # 队列阈值设定,单位 bits ,参考dymatic文章
 
         # 动作含义定义0~7
         self.action_space = [[0, 5 * pow(10, 5), 0],
@@ -40,15 +40,15 @@ class MatrixGame():
         self.bn = np.zeros(self.num_ue)
         for i in range(len(self.bn)):                           # 每比特需要周期量 70~800 cycles/bits
             if i % 5 == 0:
-                self.bn[i] = random.randint(3000,3100)
+                self.bn[i] = random.randint(3000,3100)*100
             if i % 5 == 1:
-                self.bn[i] = random.randint(4300, 4400)
+                self.bn[i] = random.randint(4300, 4400)*100
             if i % 5 == 2:
-                self.bn[i] = random.randint(3200,3300)
+                self.bn[i] = random.randint(3200,3300)*100
             if i % 5 == 3:
-                self.bn[i] = random.randint(4500,4600)
+                self.bn[i] = random.randint(4500,4600)*100
             if i % 5 == 4:
-                self.bn[i] = random.randint(4900, 5000)
+                self.bn[i] = random.randint(4900, 5000)*100
 
         self.dn = np.zeros(self.num_ue)
         for i in range(len(self.dn)):  # 每比特需要周期量 70~800 cycles/bits
@@ -167,7 +167,7 @@ class MatrixGame():
                 cost_ser = cost_ser1 + cost_ser2  # 卸载计算能耗
                 #print('cost_ser', cost_ser)
             tsum = self.bn[i] * self.action_space[actions[i]][0] * ((1 + self.Qx[i] -self.q0 * self.lambda_n[i]) * self.Q[i] - self.Qx[i] * self.lambda_n[i]+ (2 * (self.Q[i] - self.q0) * (self.Qz[i] + (self.Q[i] - self.q0) * (self.Q[i] - self.q0) - self.M2[i]) + self.Q[i] + self.Qy[i] - self.M1[i])* (1 if self.Q[i] > self.q0 else 0))
-            #reward[i] = (-(tsum / (10 ** 25) + self.V * (cost_ser + cost_local)) + 10**26) / (10 ** 25)
+            # reward[i] = (-(tsum / (10 ** 25) + self.V * (cost_ser + cost_local)) + 10**26) / (10 ** 25)
             reward[i] =  cost_ser + cost_local
 
             # print('action:', actions[i])

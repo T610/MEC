@@ -23,7 +23,7 @@ class MatrixGame_mec():
         self.delta_t = [[] for _ in  range(self.num_ue)]                            #记录时延和时延门限值的差值t_max-t
         self.g0 = pow(10, 4)                        # 信道增益 g0= -40dB
         self.N0 = pow(10, -204 / 10)                # 噪声方差 N0= -174 dBm/Hz
-        self.q0 = 1.96 * pow(10, 5)                 # 队列阈值设定,单位 bits ,参考dymatic文章
+        self.q0 = 3.96 * pow(10, 6)                 # 队列阈值设定,单位 bits ,参考dymatic文章
 
         #动作含义定义0~7
         self.action_space = [
@@ -34,38 +34,68 @@ class MatrixGame_mec():
         # self.bn = np.array([random.randint(3000,3100),random.randint(4300, 4400),
         #                     random.randint(3200,3300),random.randint(4500,4600),
         #                     random.randint(4900, 5000)])   # 输入量 kbits    #生成num_ue个数的【300，500】浮点数的数值
-        # self.dn = np.array([random.randint(70,100),random.randint(340, 390),
-        #                     random.randint(240,290),random.randint(680,730),
-        #                     random.randint(520,570)])
+        self.dn = np.array([random.randint(70,100),random.randint(340, 390),
+                            random.randint(240,290),random.randint(680,730),
+                            random.randint(520,570)])
 
         # self.bn = np.array([3000,4300,3300,4600,5000])   # 输入量 kbits    #生成num_ue个数的【300，500】浮点数的数值
         # self.dn = np.array([70,390,240,730,520])
 
+        # self.bn = np.zeros(self.num_ue)
+        # for i in range(len(self.bn)):                           # 每比特需要周期量 70~800 cycles/bits
+        #     if i % 5 == 0:
+        #         self.bn[i] = random.randint(3000,3100)*100
+        #     if i % 5 == 1:
+        #         self.bn[i] = random.randint(4300, 4400)*100
+        #     if i % 5 == 2:
+        #         self.bn[i] = random.randint(3200,3300)*100
+        #     if i % 5 == 3:
+        #         self.bn[i] = random.randint(4500,4600)*100
+        #     if i % 5 == 4:
+        #         self.bn[i] = random.randint(4900, 5000)*100
+
         self.bn = np.zeros(self.num_ue)
         for i in range(len(self.bn)):                           # 每比特需要周期量 70~800 cycles/bits
             if i % 5 == 0:
-                self.bn[i] = random.randint(3000,3100)
+                self.bn[i] = 3000*100
             if i % 5 == 1:
-                self.bn[i] = random.randint(4300, 4400)
+                self.bn[i] = 4300*100
             if i % 5 == 2:
-                self.bn[i] = random.randint(3200,3300)
+                self.bn[i] = 3300*100
             if i % 5 == 3:
-                self.bn[i] = random.randint(4500,4600)
+                self.bn[i] = 4600*100
             if i % 5 == 4:
-                self.bn[i] = random.randint(4900, 5000)
+                self.bn[i] = 5000*100
+
+
+        # self.dn = np.zeros(self.num_ue)
+        # for i in range(len(self.dn)):  # 每比特需要周期量 70~800 cycles/bits
+        #     if i % 5 == 0:
+        #         self.dn[i] = random.randint(70,100)
+        #     if i % 5 == 1:
+        #         self.dn[i] = random.randint(340, 390)
+        #     if i % 5 == 2:
+        #         self.dn[i] = random.randint(240,290)
+        #     if i % 5 == 3:
+        #         self.dn[i] = random.randint(680,730)
+        #     if i % 5 == 4:
+        #         self.dn[i] = random.randint(520,570)
+
+
 
         self.dn = np.zeros(self.num_ue)
         for i in range(len(self.dn)):  # 每比特需要周期量 70~800 cycles/bits
             if i % 5 == 0:
-                self.dn[i] = random.randint(70,100)
+                self.dn[i] = 70
             if i % 5 == 1:
-                self.dn[i] = random.randint(340, 390)
+                self.dn[i] = 390
             if i % 5 == 2:
-                self.dn[i] = random.randint(240,290)
+                self.dn[i] = 240
             if i % 5 == 3:
-                self.dn[i] = random.randint(680,730)
+                self.dn[i] = 680
             if i % 5 == 4:
-                self.dn[i] = random.randint(520,570)
+                self.dn[i] = 570
+
 
         self.t_max = np.zeros(self.num_ue)
         for i in range(len(self.t_max)):                           # 每比特需要周期量 70~800 cycles/bits
@@ -138,8 +168,8 @@ class MatrixGame_mec():
         vn = np.zeros(self.num_ue)
 
         for i in range(self.num_ue):
-            theta_pr += self.action_space[actions[i]][0] * self.pr_n[i]       # 分配到的无线带宽比例公式的分母
-            pr_Q += self.pr_n[i] * (1 if self.Q[i] > 0 else 0)                   # 分配到的mec资源比例公式的分母
+            theta_pr += self.action_space[actions[i]][0] * 1       # 分配到的无线带宽比例公式的分母
+            pr_Q += 1 * (1 if self.Q[i] > 0 else 0)                   # 分配到的mec资源比例公式的分母
 
         for i in range(self.num_ue):
 
@@ -152,14 +182,14 @@ class MatrixGame_mec():
 
             else:  # action[i]>=4 即4,5,6,7 任务选择卸载执行
 
-                rw[i] = (self.BW * self.pr_n[i]) / theta_pr  
+                rw[i] = self.BW  / theta_pr
                 vn[i] = rw[i] * np.log2(1 + (self.g0 * self.action_space[actions[i]][2] / (self.N0 * rw[i])) - pow(10, -5))           # 传输速率
                 cost_ser1 =  self.action_space[actions[i]][2] * (self.bn[i] / vn[i])
                 #print('upload energy1', cost_ser1)
                 if self.F * (self.pr_n[i] * (1 if self.Q[i] > 0 else 0)) == 0 and  pr_Q == 0: # 传输能耗公式第一部分
                     rf[i] = 0
                 else:
-                    rf[i] = self.F * (self.pr_n[i] * (1 if self.Q[i] > 0 else 0)) / pr_Q       # 卸载的任务分配到的MEC计算资源
+                    rf[i] = self.F  * (1 if self.Q[i] > 0 else 0) / pr_Q       # 卸载的任务分配到的MEC计算资源
                 # print('resource allocation', rf[i])
                 # self.t_ser = (self.bn[i] * self.vn) + (self.Q[i] * self.Li / rf[i]) + (self.bn[i] * self.dn[i] / rf[i])                               # 卸载时延???
                 # self.t[i].append(self.t_ser)
@@ -170,8 +200,8 @@ class MatrixGame_mec():
                 cost_ser = cost_ser1 + cost_ser2  # 卸载计算能耗
                 #print('cost_ser', cost_ser)
             tsum = self.bn[i] * self.action_space[actions[i]][0] * ((1 + self.Qx[i] -self.q0 * self.lambda_n[i]) * self.Q[i] - self.Qx[i] * self.lambda_n[i]+ (2 * (self.Q[i] - self.q0) * (self.Qz[i] + (self.Q[i] - self.q0) * (self.Q[i] - self.q0) - self.M2[i]) + self.Q[i] + self.Qy[i] - self.M1[i])* (1 if self.Q[i] > self.q0 else 0))
-            #reward[i] = (-(tsum / (10 ** 25) + self.V * (cost_ser + cost_local)) + 10**26) / (10 ** 25)
-            reward[i] = cost_ser + cost_local
+            # reward[i] = (-(tsum / (10 ** 25) + self.V * (cost_ser + cost_local)) + 10**26) / (10 ** 25)     # 就是reward
+            reward[i] = cost_ser + cost_local                                                                # 是cost
 
             #print('action:', actions[i])
             #print('reward:', reward[i])
@@ -179,7 +209,6 @@ class MatrixGame_mec():
         # for i in range(self.num_ue):
         #     rsum += reward[i]
         # print('reward:', rsum)
-
 
         return np.array(reward), self.bn, self.lambda_n, rf
 

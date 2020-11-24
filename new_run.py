@@ -6,8 +6,9 @@ import pandas as pd
 from matrix_game import MatrixGame
 from queue_relay import QueueRelay
 
-from dataToExcel import DTE    ##  TLIU
+
 from gpd import GPD     ##  TLIU
+from dataToExcel import DTE    ##  TLIU
 import xlrd      ##  TLIU
 import xlsxwriter    ##  TLIU
 
@@ -16,7 +17,7 @@ import xlsxwriter    ##  TLIU
 if __name__ == '__main__':
     nb_episode = 2000
     actions = np.arange(8)
-    user_num = 5
+    user_num = 10
     lambda_n = np.zeros(user_num)
     OUTPUT = []              #
     for i in range(user_num):                           # 每比特需要周期量 70~800 cycles/bits
@@ -61,7 +62,7 @@ if __name__ == '__main__':
     Q_array_histroy = [  [10] for i in range(user_num)  ]     ##  TLIU
 
     for episode in range(nb_episode):
-        print("episode",episode)
+
 
         Q_array = []
         Qx_array = []
@@ -87,7 +88,7 @@ if __name__ == '__main__':
                 data = Q_array_histroy[i]
                 # data = [10000000000000 for i in range(200) ]
                 # res = aa.gpd(  data  , 3.96*pow(10,5)  )
-                res = aa.gpd(data, 1.96 * pow(10, 5))
+                res = aa.gpd(data, 3.96 * pow(10, 6)  )
                 if res:
                     queue_relay_array[i].GPD1 = res[0][0]
                     queue_relay_array[i].GPD2 = res[0][1]
@@ -105,7 +106,7 @@ if __name__ == '__main__':
                   M2=M2_array,BW= 10 * pow(10, 6))
 
         reward, bn, lumbda, rff = game.step(actions=iteration_actions)
-
+        print("episode", episode,"reward",sum(reward))
         OUTPUT.append(sum(reward))
 
 
@@ -127,12 +128,12 @@ if __name__ == '__main__':
         print(wolf_agent_array[i].pi_average)
 
 
-    plt.plot(np.arange(len(reward_history)), reward_history, label="")
+    plt.plot(np.arange(len(reward_history)), reward_history, label="all")
     plt.show()
 
 
 
-    data = DTE("wolf")   ##  TLIU
+    data = DTE("./picture/pic2/wolf")   ##  TLIU
     print(OUTPUT)
     data.write(OUTPUT)
 

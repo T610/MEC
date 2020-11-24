@@ -7,6 +7,11 @@ from matrix_game import MatrixGame
 from queue_relay import QueueRelay
 import matplotlib.pyplot as plt
 
+from gpd import GPD     ##  TLIU
+from dataToExcel import DTE    ##  TLIU
+import xlrd      ##  TLIU
+import xlsxwriter    ##  TLIU
+
 class draw_picture():
 
     def __init__(self):
@@ -14,7 +19,7 @@ class draw_picture():
         self.usersnumber = []
 
     def run_for_all_mode(self,bw,un):
-        nb_episode = 2000
+        nb_episode = 1000
         actions = np.arange(8)
         user_num = un
         lambda_n = np.zeros(user_num)
@@ -56,6 +61,8 @@ class draw_picture():
         reward_history = []
         # init_Queue_relay
 
+        Q_array_histroy = [[10] for i in range(user_num)]  ##  TLIU
+
         for episode in range(nb_episode):
 
             Q_array = []
@@ -72,6 +79,21 @@ class draw_picture():
                 Qz_array.append(queue_relay_array[i].Qz)
                 M1_array.append(queue_relay_array[i].M1)
                 M2_array.append(queue_relay_array[i].M2)
+
+            for i in range(user_num):
+                Q_array_histroy[i].append(Q_array[i])
+            if episode % 50 == 0 and episode != 0:
+                for i in range(user_num):
+                    aa = GPD()
+                    data = Q_array_histroy[i]
+                    # data = [10000000000000 for i in range(200) ]
+                    # res = aa.gpd(  data  , 3.96*pow(10,5)  )
+                    res = aa.gpd(data, 3.96 * pow(10, 6))
+                    if res:
+                        queue_relay_array[i].GPD1 = res[0][0]
+                        queue_relay_array[i].GPD2 = res[0][1]
+                        queue_relay_array[i].updateM1()
+                        queue_relay_array[i].updateM2()
 
             iteration_actions = []
             for i in range(user_num):
@@ -105,7 +127,7 @@ class draw_picture():
         return reward_history[-1]
 
     def run_for_only_mec(self,bw1,un1):
-        nb_episode = 2000
+        nb_episode = 1000
         actions_set = [
             [1, 0, 0.1],
             [1, 0, 0.5],
@@ -145,6 +167,8 @@ class draw_picture():
         reward_history = []
         # init_Queue_relay
 
+        Q_array_histroy = [[10] for i in range(user_num)]  ##  TLIU
+
         for episode in range(nb_episode):
 
             Q_array = []
@@ -161,6 +185,21 @@ class draw_picture():
                 Qz_array.append(queue_relay_array[i].Qz)
                 M1_array.append(queue_relay_array[i].M1)
                 M2_array.append(queue_relay_array[i].M2)
+
+            for i in range(user_num):
+                Q_array_histroy[i].append(Q_array[i])
+            if episode % 50 == 0 and episode != 0:
+                for i in range(user_num):
+                    aa = GPD()
+                    data = Q_array_histroy[i]
+                    # data = [10000000000000 for i in range(200) ]
+                    # res = aa.gpd(  data  , 3.96*pow(10,5)  )
+                    res = aa.gpd(data, 3.96 * pow(10, 6))
+                    if res:
+                        queue_relay_array[i].GPD1 = res[0][0]
+                        queue_relay_array[i].GPD2 = res[0][1]
+                        queue_relay_array[i].updateM1()
+                        queue_relay_array[i].updateM2()
 
             iteration_actions = []
             for i in range(user_num):
@@ -195,7 +234,7 @@ class draw_picture():
         return reward_history[-1]
 
     def run_for_only_local(self,bw2,un2):
-        nb_episode = 2000
+        nb_episode = 1000
         actions_set = [
             [0, 5 * pow(10, 6), 0],
             [0, 10 * pow(10, 6), 0],
@@ -235,6 +274,9 @@ class draw_picture():
         reward_history = []
         # init_Queue_relay
 
+
+        Q_array_histroy = [[10] for i in range(user_num)]  ##  TLIU
+
         for episode in range(nb_episode):
 
             Q_array = []
@@ -251,6 +293,22 @@ class draw_picture():
                 Qz_array.append(queue_relay_array[i].Qz)
                 M1_array.append(queue_relay_array[i].M1)
                 M2_array.append(queue_relay_array[i].M2)
+
+            for i in range(user_num):
+                Q_array_histroy[i].append(Q_array[i])
+            if episode % 50 == 0 and episode != 0:
+                for i in range(user_num):
+                    aa = GPD()
+                    data = Q_array_histroy[i]
+                    # data = [10000000000000 for i in range(200) ]
+                    # res = aa.gpd(  data  , 3.96*pow(10,5)  )
+                    res = aa.gpd(data, 3.96 * pow(10, 6))
+                    if res:
+                        queue_relay_array[i].GPD1 = res[0][0]
+                        queue_relay_array[i].GPD2 = res[0][1]
+                        queue_relay_array[i].updateM1()
+                        queue_relay_array[i].updateM2()
+
 
             iteration_actions = []
             for i in range(user_num):
@@ -293,22 +351,56 @@ if __name__ == '__main__':
     cost_of_all = []
     cost_of_mec = []
     cost_of_local = []
+    cost_of_all_15ge = []
+    cost_of_all_20ge = []
+    cost_of_all_25ge = []
+
 
     for i in range(8):
-        cost_of_all.append(draw.run_for_all_mode(bw=bandwidth[i], un=30))
-        cost_of_mec.append(draw.run_for_only_mec(bw1=bandwidth[i], un1=30))
-        cost_of_local.append(draw.run_for_only_local(bw2=bandwidth[i], un2=30))
+        cost_of_all.append(draw.run_for_all_mode(bw=bandwidth[i], un=10))
+        cost_of_mec.append(draw.run_for_only_mec(bw1=bandwidth[i], un1=10))
+        cost_of_local.append(draw.run_for_only_local(bw2=bandwidth[i], un2=10))
+        cost_of_all_15ge.append(draw.run_for_all_mode(bw=bandwidth[i], un=15))
+        cost_of_all_20ge.append(draw.run_for_all_mode(bw=bandwidth[i], un=20))
+        cost_of_all_25ge.append(draw.run_for_all_mode(bw=bandwidth[i], un=25))
 
     plt.plot(bandwidth, cost_of_all, '^-', linewidth=0.4, label='all selection')
     plt.plot(bandwidth, cost_of_local, '<-', linewidth=0.4, label='only local selection')
     plt.plot(bandwidth, cost_of_mec, '>-', linewidth=0.4, label='only MEC selection')
+    plt.plot(bandwidth, cost_of_all_15ge, '<-', linewidth=0.2, label='all selection of 15 UEs')
+    plt.plot(bandwidth, cost_of_all_20ge, '<-', linewidth=0.2, label='all selection of 20 UEs')
+    plt.plot(bandwidth, cost_of_all_25ge, '<-', linewidth=0.2, label='all selection of 25 UEs')
+
     plt.grid(True)      #显示网格
 
     plt.xlabel('The Bandwidth of Channel')
     plt.ylabel('Sum Cost')
-    plt.legend(loc='upper left')    #图例右上角
+    plt.legend(loc='upper right')    #图例右上角
     plt.show()
-    #plt.savefig('f1-bandwidth.png')
+
+    data = DTE("./picture/pic3/all")   ##  TLIU
+    print(cost_of_all)
+    data.write(cost_of_all)
+
+    data = DTE("./picture/pic3/mec")   ##  TLIU
+    print(cost_of_mec)
+    data.write(cost_of_mec)
+
+    data = DTE("./picture/pic3/local")   ##  TLIU
+    print(cost_of_local)
+    data.write(cost_of_local)
+
+    data = DTE("./picture/pic3/all_15_UEs")   ##  TLIU
+    print(cost_of_all_15ge)
+    data.write(cost_of_all_15ge)
+
+    data = DTE("./picture/pic3/all_20_UEs")   ##  TLIU
+    print(cost_of_all_20ge)
+    data.write(cost_of_all_20ge)
+
+    data = DTE("./picture/pic3/all_25_UEs")   ##  TLIU
+    print(cost_of_all_25ge)
+    data.write(cost_of_all_25ge)
 
 
 

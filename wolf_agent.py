@@ -5,7 +5,8 @@ class WoLFAgent():
         Policy hill-climbing algorithm(PHC)
         http://www.cs.cmu.edu/~mmv/papers/01ijcai-mike.pdf
     """
-    def __init__(self, alpha=0.1, delta=0.0001, actions=None, high_delta=0.004, low_delta=0.002):
+    def __init__(self, alpha=0.1, delta=0.0001, actions=None, high_delta=0.005, low_delta=0.001):
+
         self.alpha = alpha
         self.actions = actions  
         self.last_action_id = None

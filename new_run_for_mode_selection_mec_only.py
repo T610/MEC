@@ -20,7 +20,7 @@ if __name__ == '__main__':
                    [1, 0, 0.3],
                    [1, 0, 0.4]]
     actions = np.arange(len(actions_set))
-    user_num = 5
+    user_num = 10
     lambda_n = np.zeros(user_num)
     for i in range(user_num):                           # 每比特需要周期量 70~800 cycles/bits
         if i % 5 == 0:
@@ -90,7 +90,7 @@ if __name__ == '__main__':
                 data = Q_array_histroy[i]
                 # data = [10000000000000 for i in range(200) ]
                 # res = aa.gpd(  data  , 3.96*pow(10,5)  )
-                res = aa.gpd(  data  , 1.96 *pow(10,5)  )
+                res = aa.gpd(  data  , 3.96 * pow(10, 6)    )
                 if res :
                     queue_relay_array[i].GPD1 = res[0][0]
                     queue_relay_array[i].GPD2 = res[0][1]
@@ -107,10 +107,10 @@ if __name__ == '__main__':
                   M1=M1_array,
                   M2=M2_array,BW = 10 * pow(10, 6) )
 
-        print('Q value :'+str(Q_array)+str(Qx_array)+str(Qy_array)+str(Qz_array))
+        #print('Q value :'+str(Q_array)+str(Qx_array)+str(Qy_array)+str(Qz_array))
 
         reward, bn, lumbda, rff = game.step(actions=iteration_actions)
-
+        print("episode", episode, "reward", sum(reward))
         OUTPUT.append(sum(reward))
 
         for i in range(user_num):
@@ -129,10 +129,10 @@ if __name__ == '__main__':
 
     for i in range(user_num):
         print(wolf_agent_array[i].pi_average)
-    plt.plot(np.arange(len(reward_history)), reward_history, label="")
+    plt.plot(np.arange(len(reward_history)), reward_history, label="only mec")
     plt.show()
 
-    data = DTE("mec")   ##  TLIU
+    data = DTE("./picture/pic2/mec")   ##  TLIU
     print(OUTPUT)
     data.write(OUTPUT)
 
@@ -145,36 +145,3 @@ if __name__ == '__main__':
 
 
 
-
-
-
-
-
-
-    # game = MatrixGame()
-    # for episode in range(nb_episode):
-    #     actions = []
-    #     action1 = agent1.act()
-    #     action2 = agent2.act()
-    #     action3 = agent3.act()
-    #     actions.append(action1)
-    #     actions.append(action2)
-    #     actions.append(action3)
-    #     _, reward = game.step(actions)
-
-    #     agent1.observe(reward=reward[0])
-    #     agent2.observe(reward=reward[1])
-    #     agent3.observe(reward=reward[2])
-
-    # print(agent1.q_values)
-    # print(agent2.q_values)
-    # print(agent3.q_values)
-    # plt.plot(np.arange(len(agent1.pi_history)),agent1.pi_history, label="agent1's pi(0)")
-    # plt.plot(np.arange(len(agent2.pi_history)),agent2.pi_history, label="agent2's pi(0)")
-    # plt.plot(np.arange(len(agent3.pi_history)),agent3.pi_history, label="agent3's pi(0)")
-    # plt.ylim(0, 1)
-    # plt.xlabel("episode")
-    # plt.ylabel("pi(0)")
-    # plt.legend()
-    # plt.savefig("result.png")
-    # plt.show()
