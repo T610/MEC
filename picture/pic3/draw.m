@@ -10,7 +10,7 @@ all_25_UEs = importfile(".\all_25_UEs.xlsx", "Sheet1", [2, length]);
 
 %%
 
-Step = [0.2:0.2:1.6];
+Step = [2:2:16];
 plot(Step,all,'-o')
 hold on
 plot(Step,mec,'-*')
@@ -25,7 +25,7 @@ plot(Step,all_25_UEs,'-d')
 hold on
 %axis( [10 45 -1 15] )
 
-xlabel('The bandwidth of channel (HZ)')
+xlabel('The bandwidth of channel (MHZ)')
 ylabel('Sum of cost  (J)')
 legend('all selection','only MEC selection','only loacl selection','all selection of 15 UEs','all selection of 20 UEs','all selection of 25 UEs')
 %legend('wolf phc ','offloading only','wolf-phc-dl2-dh5','wolf-phc-dl1-dh4')
