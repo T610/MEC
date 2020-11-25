@@ -1,0 +1,59 @@
+
+function res = gpd(y,threshold )
+
+paramEsts = gpfit(y);
+kHat      = paramEsts(1)   % Tail index parameter
+sigmaHat  = paramEsts(2)   % Scale parameter
+
+
+
+
+
+
+
+
+
+
+res = [kHat,sigmaHat ] ;
+
+
+end 
+
+
+target = 22;
+y = [1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,3,2,2,2,2,2,22,23,2];
+[F,xi] = ecdf(y);
+paramEsts = gpfit(y);
+kHat      = paramEsts(1);
+sigmaHat = paramEsts(2);
+
+yi = gpcdf(xi,kHat,sigmaHat);
+plot(xi,yi,'r-');
+hold on;
+%stairs(xi,F,'r');
+hold on;
+
+for  i=2:size(xi)
+
+     if (xi(i-1) <= target  )  & ( target  <  xi(i) ) 
+        [k,b] = forkb(xi(i-1),yi(i-1),xi(i),yi(i))
+        out = k* target + b
+        break;
+
+     end
+
+end
+
+plot(target,out,'o')
+
+
+
+function [k,b] = forkb(x1,y1,x2,y2)
+    k = (y2-y1)/(x2-x1);
+    b = y1 - x1*k;
+
+end
+
+
+
+

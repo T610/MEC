@@ -21,19 +21,22 @@ Step = [1:1:2000];
 %plot(Step,mec,'g')
 %hold 
 
-windowSize = 10;
+
+windowSize = ;
 yy=filter(ones(1,windowSize)/windowSize,1,wolf);
 plot(Step,yy,'r')
 hold on
 yy=filter(ones(1,windowSize)/windowSize,1,mec);
 plot(Step,yy,'b')
 hold on
-yy=filter(ones(1,windowSize)/windowSize,1,wolf_dl2_dh5);
-plot(Step,yy,'g')
-hold on
 yy=filter(ones(1,windowSize)/windowSize,1,wolf_dl1_dh4);
 plot(Step,yy,'m')
 hold on
+yy=filter(ones(1,windowSize)/windowSize,1,wolf_dl2_dh5);
+plot(Step,yy,'r')
+hold on
+
+
 
 
 %axis( [0 2000 80 120] )

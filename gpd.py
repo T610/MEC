@@ -13,14 +13,15 @@ class GPD:
 
     def gpd(self,data,threshold):
 
-        # 取得是过去10的倍数的值  并且超过阈值
-        segment = len(data) // 10
-        data = data[ -1*segment*10: ]
+        # 取得是过去slice的倍数的值  并且超过阈值
+        slice = 1
+        segment = len(data) // slice
+        data = data[ -1*segment*slice: ]
         print(data)
         temp = []
-        left = -1*segment*10
+        left = -1*segment*slice
         for i in range(segment) :
-            right = left + 10
+            right = left + slice
             if right == 0:
                 mid = data[left:]
             else:
@@ -28,14 +29,21 @@ class GPD:
             if max(mid) >= threshold:
                 temp.append(max(mid))
             # print(mid)
-            left += 10
+            left += slice
         print("temp",temp)
         if not temp :
             return
         temp = matlab.double(temp)
-        res  = self.engine.gpfit(temp)
-
-        return res
+        # temp = []
+        threshold = [threshold]
+        # threshold = threshold.tolist()
+        threshold = matlab.double(threshold)
+        # res  = self.engine.gpfit(temp)
+        ans = self.engine.gpd(temp ,threshold)
+        res = ans[0][0:2]
+        probability = ans[0][2]
+        print(probability)
+        return res,probability
 
 
 
