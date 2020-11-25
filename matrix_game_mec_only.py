@@ -17,7 +17,7 @@ class MatrixGame_mec():
         self.V = 4 * pow(10, 27)                    # V =4 (Mbits)^2/J   李雅普诺夫权衡参数
         self.tau = pow(10, -2)                      # 时隙τ，1ms
         self.kmob = pow(10, -21)                    # 本地cpu核有效电容参数
-        self.kser = 8 * pow(10, -27)             # 服务器cpu核有效电容参数 参考【9】0.08 * pow(10,-27)
+        self.kser = 0.08 * pow(10, -27)             # 服务器cpu核有效电容参数 参考【9】0.08 * pow(10,-27)
         self.Li = 737.5                       # 737.5 ,mecCPU处理密度 单位 cycles/bits
         self.t = [[] for _ in  range(self.num_ue)]                                 #记录时延
         self.delta_t = [[] for _ in  range(self.num_ue)]                            #记录时延和时延门限值的差值t_max-t
@@ -189,7 +189,7 @@ class MatrixGame_mec():
                 if self.F * (self.pr_n[i] * (1 if self.Q[i] > 0 else 0)) == 0 and  pr_Q == 0: # 传输能耗公式第一部分
                     rf[i] = 0
                 else:
-                    rf[i] = self.F  * (1 if self.Q[i] > 0 else 0) / pr_Q       # 卸载的任务分配到的MEC计算资源
+                    rf[i] = self.F  * 1 * (1 if self.Q[i] > 0 else 0) / pr_Q       # 卸载的任务分配到的MEC计算资源
                 # print('resource allocation', rf[i])
                 # self.t_ser = (self.bn[i] * self.vn) + (self.Q[i] * self.Li / rf[i]) + (self.bn[i] * self.dn[i] / rf[i])                               # 卸载时延???
                 # self.t[i].append(self.t_ser)
@@ -200,8 +200,8 @@ class MatrixGame_mec():
                 cost_ser = cost_ser1 + cost_ser2  # 卸载计算能耗
                 #print('cost_ser', cost_ser)
             tsum = self.bn[i] * self.action_space[actions[i]][0] * ((1 + self.Qx[i] -self.q0 * self.lambda_n[i]) * self.Q[i] - self.Qx[i] * self.lambda_n[i]+ (2 * (self.Q[i] - self.q0) * (self.Qz[i] + (self.Q[i] - self.q0) * (self.Q[i] - self.q0) - self.M2[i]) + self.Q[i] + self.Qy[i] - self.M1[i])* (1 if self.Q[i] > self.q0 else 0))
-            # reward[i] = (-(tsum / (10 ** 25) + self.V * (cost_ser + cost_local)) + 10**26) / (10 ** 25)     # 就是reward
-            reward[i] = cost_ser + cost_local                                                                # 是cost
+            reward[i] = (-(tsum / (10 ** 25) + self.V * (cost_ser + cost_local)) + 10**26) / (10 ** 25)     # 就是reward
+            # reward[i] = cost_ser + cost_local                                                                # 是cost
 
             #print('action:', actions[i])
             #print('reward:', reward[i])

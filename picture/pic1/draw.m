@@ -1,73 +1,41 @@
 
 
-%% 设置导入选项并导入数据
-opts = spreadsheetImportOptions("NumVariables", 1);
-
-% 指定工作表和范围
-opts.Sheet = "Sheet1";
-opts.DataRange = "A2:A2001";
-
-% 指定列名称和类型
-opts.VariableNames = "UE";
-opts.VariableTypes = "double";
-
-% 导入数据
-tbl = readtable(".\wolf.xlsx", opts, "UseExcel", false);
-
-%% 转换为输出类型
-wolf = tbl.UE;
-
-%% 设置导入选项并导入数据
-opts = spreadsheetImportOptions("NumVariables", 1);
-
-% 指定工作表和范围
-opts.Sheet = "Sheet1";
-opts.DataRange = "A2:A2001";
-
-% 指定列名称和类型
-opts.VariableNames = "UE";
-opts.VariableTypes = "double";
-
-% 导入数据
-tbl = readtable(".\local.xlsx", opts, "UseExcel", false);
-
-%% 转换为输出类型
-local = tbl.UE;
-
-
-%% 设置导入选项并导入数据
-opts = spreadsheetImportOptions("NumVariables", 1);
-
-% 指定工作表和范围
-opts.Sheet = "Sheet1";
-opts.DataRange = "A2:A2001";
-
-% 指定列名称和类型
-opts.VariableNames = "UE";
-opts.VariableTypes = "double";
-
-% 导入数据
-tbl = readtable(".\mec.xlsx", opts, "UseExcel", false);
-
-%% 转换为输出类型
-mec = tbl.UE;
-
-
+wolf = importfile(".\wolf.xlsx", "Sheet1", [2, 2001]);
+wolf_dl2_dh5 = importfile(".\wolf_dl2_dh5.xlsx", "Sheet1", [2, 2001]);
+wolf_dl1_dh4 = importfile(".\wolf_dl1_dh4.xlsx", "Sheet1", [2, 2001]);
+local = importfile(".\local.xlsx", "Sheet1", [2, 2001]);
+mec = importfile(".\mec.xlsx", "Sheet1", [2, 2001]);
 
 
 %%
-Step = [1:1:2000];
 
-plot(Step,wolf,'r')
-hold
-plot(Step,local,'m')
+Step = [1:1:2000];
+%%plot(Step,wolf,'r')
+%%hold on
+%%plot(Step,wolf_dl2_dh5,'y')
+%%hold on
+%%plot(Step,wolf_dl1_dh4,'b')
+%hold on
+%plot(Step,local,'m')
+%hold on
+%plot(Step,mec,'g')
+%hold 
+
+plotyy(Step,wolf,Step,local)
 hold on
 plot(Step,mec,'g')
 hold on
+plot(Step,wolf_dl2_dh5,'y')
+hold on
+plot(Step,wolf_dl1_dh4,'b')
+hold on
 
 
+
+
+%axis( [0 2000 -400 200] )
 
 xlabel('Episode')
 ylabel('Reward')
-
-legend('wolf-phc','local only','mec only')
+legend('wolf-phc','wolf-phc-dl2-dh5','wolf-phc-dl1-dh4','local only','mec only')
+%figure

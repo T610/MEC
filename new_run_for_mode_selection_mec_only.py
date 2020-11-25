@@ -132,7 +132,7 @@ if __name__ == '__main__':
     plt.plot(np.arange(len(reward_history)), reward_history, label="only mec")
     plt.show()
 
-    data = DTE("./picture/pic2/mec")   ##  TLIU
+    data = DTE("./picture/pic1/mec")   ##  TLIU
     print(OUTPUT)
     data.write(OUTPUT)
 
