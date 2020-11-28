@@ -17,6 +17,7 @@ if __name__ == '__main__':
     user_num = 10
     lambda_n = np.zeros(user_num)
     OUTPUT = []  #
+    gpdaa = GPD()
     for i in range(user_num):  # 每比特需要周期量 70~800 cycles/bits
         if i % 5 == 0:
             lambda_n[i] = 0.001
@@ -79,11 +80,11 @@ if __name__ == '__main__':
             Q_array_histroy[i].append(Q_array[i])
         if episode % 50 == 0 and episode != 0:
             for i in range(user_num):
-                aa = GPD()
+
                 data = Q_array_histroy[i]
                 # data = [10000000000000 for i in range(200) ]
                 # res = aa.gpd(  data  , 3.96*pow(10,5)  )
-                res = aa.gpd(data, 3.96 * pow(10, 6))
+                res, _ = gpdaa.gpd(data, 3.96 * pow(10, 6))
                 if res:
                     queue_relay_array[i].GPD1 = res[0][0]
                     queue_relay_array[i].GPD2 = res[0][1]
@@ -127,12 +128,3 @@ if __name__ == '__main__':
     data = DTE("./picture/pic1/wolf_dl2_dh5")  ##  TLIU
     print(OUTPUT)
     data.write(OUTPUT)
-
-
-
-
-
-
-
-
-

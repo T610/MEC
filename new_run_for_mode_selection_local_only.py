@@ -15,6 +15,7 @@ import xlsxwriter    ##  TLIU
 
 if __name__ == '__main__':
     OUTPUT = []  #
+    gpdaa = GPD()
     nb_episode = 2000
     actions_set = [
         [0, 5 * pow(10, 6), 0],
@@ -88,11 +89,11 @@ if __name__ == '__main__':
             Q_array_histroy[i].append(Q_array[i])
         if episode % 50 == 0 and episode != 0:
             for i in range(user_num):
-                aa = GPD()
+
                 data = Q_array_histroy[i]
                 # data = [10000000000000 for i in range(200) ]
                 # res = aa.gpd(  data  , 3.96*pow(10,5)  )
-                res = aa.gpd(data, 3.96 * pow(10, 6)  )
+                res,_ = aa.gpd(data, 3.96 * pow(10, 6)  )
                 if res:
                     queue_relay_array[i].GPD1 = res[0][0]
                     queue_relay_array[i].GPD2 = res[0][1]

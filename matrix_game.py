@@ -23,7 +23,7 @@ class MatrixGame():
         self.delta_t = [[] for _ in  range(self.num_ue)]                            #记录时延和时延门限值的差值t_max-t
         self.g0 = pow(10, 4)                        # 信道增益 g0= -40dB
         self.N0 = pow(10, -204 / 10)                # 噪声方差 N0= -174 dBm/Hz
-        self.q0 = 3.96 * pow(10, 6)                   # 队列阈值设定,单位 bits ,参考dymatic文章
+        self.q0 = 3.96 * pow(10, 7)                   # 队列阈值设定,单位 bits ,参考dymatic文章
 
         # 动作含义定义0~7
         self.action_space = [[0, 5 * pow(10, 5), 0],
@@ -119,8 +119,8 @@ class MatrixGame():
 
 
     def step(self, actions):
-        getreward, bn, lambda_n , rf  = self.cal_reward(actions)
-        return  getreward, bn, lambda_n , rf
+        getreward, getcostlocal, bn, lambda_n , rf  = self.cal_reward(actions)
+        return  getreward, getcostlocal, bn, lambda_n , rf
 
     def cal_reward(self, actions):
         theta_pr = 0
@@ -128,6 +128,8 @@ class MatrixGame():
         tsum = 0
         reward = [[] for _ in range(self.num_ue)]
         cost_local = 0
+        cost_local_record = [[] for _ in range(self.num_ue)]
+
         cost_ser = 0
         cost_ser1 = 0
         cost_ser2 = 0
@@ -167,13 +169,16 @@ class MatrixGame():
                 cost_ser = cost_ser1 + cost_ser2  # 卸载计算能耗
                 #print('cost_ser', cost_ser)
             tsum = self.bn[i] * self.action_space[actions[i]][0] * ((1 + self.Qx[i] -self.q0 * self.lambda_n[i]) * self.Q[i] - self.Qx[i] * self.lambda_n[i]+ (2 * (self.Q[i] - self.q0) * (self.Qz[i] + (self.Q[i] - self.q0) * (self.Q[i] - self.q0) - self.M2[i]) + self.Q[i] + self.Qy[i] - self.M1[i])* (1 if self.Q[i] > self.q0 else 0))
-            reward[i] = (-(tsum / (10 ** 25) + self.V * (cost_ser + cost_local)) + 10**26) / (10 ** 25)
-            #reward[i] =  cost_ser + cost_local
+            # reward[i] = (-(tsum / (10 ** 25) + self.V * (cost_ser + cost_local)) + 10**26) / (10 ** 25)
+            reward[i] = - (cost_ser + cost_local)
+            cost_local_record[i] = cost_local
+
+
 
             # print('action:', actions[i])
             # print('reward:', reward[i])
 
-        return np.array(reward), self.bn, self.lambda_n, rf
+        return np.array(reward),np.array(cost_local_record) ,self.bn, self.lambda_n, rf
 
 
 

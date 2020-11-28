@@ -8,7 +8,7 @@ class QueueRelay:
         self.GPD2 = GPD2
         self.tau = pow(10,-3)         # time slot τ，1ms
         self.kmob = pow(10,-27)       #本地cpu核有效电容参数
-        self.Li = 8250             #737.5                      #mecCPU处理密度 单位 cycles/bits
+        self.Li = 737.5             #737.5                      #mecCPU处理密度 单位 cycles/bits
         self.q0 = 3.96*pow(10,7)   #队列阈值设定,单位 bits ,参考dymatic文章
         self.lumbda = lumbda 
         self.F = 10 * pow(10,9)       # F =10Ghz     MEC 计算能力

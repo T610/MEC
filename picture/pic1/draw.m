@@ -34,9 +34,7 @@ hold on
 yy=filter(ones(1,windowSize)/windowSize,1,wolf_dl1_dh4);
 plot(Step,yy,'m')
 hold on
-
-
-%axis( [0 2000 80 120] )
+axis( [0 2000 -180 120] )
 
 xlabel('Episode')
 ylabel('Reward')

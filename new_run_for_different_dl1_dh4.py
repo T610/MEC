@@ -17,6 +17,8 @@ if __name__ == '__main__':
     user_num = 10
     lambda_n = np.zeros(user_num)
     OUTPUT = []  #
+    PR = [[] for i in range(user_num)]
+    gpdtemp = GPD()
     for i in range(user_num):  # 每比特需要周期量 70~800 cycles/bits
         if i % 5 == 0:
             lambda_n[i] = 0.001
@@ -79,12 +81,18 @@ if __name__ == '__main__':
             Q_array_histroy[i].append(Q_array[i])
         if episode % 50 == 0 and episode != 0:
             for i in range(user_num):
-                aa = GPD()
+
                 data = Q_array_histroy[i]
                 # data = [10000000000000 for i in range(200) ]
                 # res = aa.gpd(  data  , 3.96*pow(10,5)  )
-                res = aa.gpd(data, 3.96 * pow(10, 6))
+
+                res = gpdtemp.gpd(data, 3.96 * pow(10, 7))
+
                 if res:
+
+                    probability = res[1]
+                    PR[i].append(probability)
+                    print(res)
                     queue_relay_array[i].GPD1 = res[0][0]
                     queue_relay_array[i].GPD2 = res[0][1]
                     queue_relay_array[i].updateM1()
@@ -99,7 +107,7 @@ if __name__ == '__main__':
                           M1=M1_array,
                           M2=M2_array, BW=10 * pow(10, 6))
 
-        reward, bn, lumbda, rff = game.step(actions=iteration_actions)
+        reward,_, bn, lumbda, rff = game.step(actions=iteration_actions)
         print("episode", episode, "reward", sum(reward))
         OUTPUT.append(sum(reward))
 
@@ -120,15 +128,22 @@ if __name__ == '__main__':
     for i in range(user_num):
         print(wolf_agent_array[i].pi_average)
 
-    plt.plot(np.arange(len(reward_history)), reward_history, label="all")
-    plt.title('wolf_dl2-dh6')
-    plt.show()
+    # plt.plot(np.arange(len(reward_history)), reward_history, label="all")
+    # plt.title('wolf_dl2-dh6')
+    # # plt.show()
 
-    data = DTE("./picture/pic1/wolf_dl2_dh6")  ##  TLIU
-    print(OUTPUT)
-    data.write(OUTPUT)
+    # data = DTE("./picture/pic1/wolf_dl2_dh6")  ##  TLIU
+    # print(OUTPUT)
+    # data.write(OUTPUT)
 
+    # plt.plot(np.arange(len(PR[1])), PR[1])
+    # plt.title('PR[1]')
+    # plt.show()
 
+    for i in range(user_num):
+
+        data = DTE("./picture/pic1/PR"+str(i))  ##  TLIU
+        data.write(PR[i])
 
 
 

@@ -23,7 +23,7 @@ class MatrixGame_mec():
         self.delta_t = [[] for _ in  range(self.num_ue)]                            #记录时延和时延门限值的差值t_max-t
         self.g0 = pow(10, 4)                        # 信道增益 g0= -40dB
         self.N0 = pow(10, -204 / 10)                # 噪声方差 N0= -174 dBm/Hz
-        self.q0 = 3.96 * pow(10, 6)                 # 队列阈值设定,单位 bits ,参考dymatic文章
+        self.q0 = 3.96 * pow(10, 7)                 # 队列阈值设定,单位 bits ,参考dymatic文章
 
         #动作含义定义0~7
         self.action_space = [

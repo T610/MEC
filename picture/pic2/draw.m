@@ -23,7 +23,7 @@ plot(Step,all_12MHZ,'-d')
 hold on
 axis( [10 45 -1 15] )
 xlabel('The number of UE')
-ylabel('Sum of cost')
+ylabel('Sum of cost  (J)')
 legend('all selection','only MEC selection','only local selection','all selection of 6MHZ','all selection of 8MHZ','all selection of 12MHZ')
 %figure
 
